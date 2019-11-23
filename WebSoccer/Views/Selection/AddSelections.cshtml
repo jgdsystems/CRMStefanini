@@ -1,0 +1,115 @@
+﻿@model WebSoccer.Models.Selection
+
+@{
+    ViewBag.Title = "Adicionar posição";
+}
+
+@Html.Partial("_ViewSession")
+
+
+<h2>Seleção</h2>
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>Adicionar posição</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        
+       
+        <div class="form-group">
+            @Html.Label("Time", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+               
+                @{
+                    List<SelectListItem> listTeam = new List<SelectListItem>();
+                    foreach (var item in Model.ListTeam)
+                    {
+                        listTeam.Add(new SelectListItem
+                        {
+                            Text = item.Name,
+                            Value = item.Id_team.ToString()
+                        });
+
+                    }
+
+                }
+                
+                @Html.DropDownListFor(model => model.Team_id_team, new SelectList(listTeam, "Value", "Text"), "Selecione", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Team_id_team, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Jogador", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+
+                @{
+                    List<SelectListItem> listPlayer = new List<SelectListItem>();
+                    foreach (var item in Model.ListPlayer)
+                    {
+                        listPlayer.Add(new SelectListItem
+                        {
+                            Text = item.Name,
+                            Value = item.Id_player.ToString()
+                        });
+
+                    }
+
+                }
+
+                @Html.DropDownListFor(model => model.Players_id_player, new SelectList(listPlayer, "Value", "Text"), "Selecione", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Players_id_player, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            @Html.Label("Posição", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+
+                @{
+                    List<SelectListItem> listPosition = new List<SelectListItem>();
+                    foreach (var item in Model.ListPosition)
+                    {
+                        listPosition.Add(new SelectListItem
+                        {
+                            Text = item.Name,
+                            Value = item.Id_Positions.ToString()
+                        });
+
+                    }
+
+                }
+
+                @Html.DropDownListFor(model => model.Positions_id_positions, new SelectList(listPosition, "Value", "Text"), "Selecione", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Positions_id_positions, "", new { @class = "text-danger" })
+
+            </div>
+        </div>
+
+
+
+        @*
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Positions_id_positions, "Positions_id_positions", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("Positions_id_positions", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Positions_id_positions, "", new { @class = "text-danger" })
+            </div>
+        </div>
+            
+            *@
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Criar" class="btn btn-default" />
+                @Html.ActionLink("Cancelar", "Index", new { }, new { @class = "btn btn-default" })
+            </div>
+        </div>
+    </div>
+}
+

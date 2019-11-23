@@ -1,0 +1,117 @@
+﻿@model WebSoccer.ViewModel.ListaPaginada<WebSoccer.Models.Players>
+
+
+@{
+    ViewBag.Title = "Cadastro de jogadores";
+}
+
+@Html.Partial("_ViewSession")
+
+
+<h2>Cadastro de jogadores</h2>
+<h4>Limite de 20 jogadores <br> (14 disponíveis e 6 reservas) </h4>
+
+<p>
+   @if (Model.Itens.Count < 20)
+   {
+        @Html.ActionLink("Criar novo jogador", "AddPlayer", new { }, new { @class = "btn btn-default" })
+   }
+</p>
+<table class="table">
+    <tr>
+
+        <th>
+            @Html.DisplayName("Nome")
+        </th>
+        @*<th>
+            @Html.DisplayName("Posição preferencial")
+        </th>*@
+        @*<th>
+            @Html.DisplayName("Email")
+        </th>*@
+        <th>
+            @Html.DisplayName("Tipo")
+        </th>
+        <th>
+            @Html.DisplayName("Status")
+        </th>
+    
+    @*<th>
+            @Html.DisplayName("Vai jogar?")
+        </th>*@
+        <th></th>
+    </tr>
+
+
+    @if (Model.TotalItens > 0)
+    {
+
+            var count = 0;
+            var corfundo = "#EAEAEA";
+            foreach (var item in Model.Itens)
+            {
+            
+                <tr bgcolor="@corfundo" onclick="window.open('../Players/Edit/@item.Id_player','_self')" onMouseOver="this.bgColor='#CCCCCC'" onMouseOut="this.bgColor='@corfundo'" cursor="Auto">
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    @*<td>
+                        @Html.DisplayFor(modelItem => item.Positions.Name)
+                    </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Type)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                   
+                </tr>
+                count++;
+                if (@corfundo == "#FFFFFF")
+                {  corfundo = "#EAEAEA"; }
+                else
+                { corfundo = "#FFFFFF"; }
+
+            }
+       }
+
+</table>
+
+
+@if (Model.TotalPaginas > 1)
+{
+    <div>
+        @for (var i = 1; i < Model.TotalPaginas; i++)
+        {
+            Url.Action("Index", new { page = i });
+        }
+    </div>
+}
+
+
+<div class="container">
+    <table>
+        <tr>
+            <td style="width:50px">
+            @if (Model.PaginaAtual > 1)
+            {
+                    <p>  @Html.ActionLink("<<", "Index", new { page = Model.PaginaAtual - 1 }, new { @class = "btn btn-default" })  </p>
+                
+            }
+
+            </td>
+            <td style="width:100px">
+                <p>P&aacute;gina @Model.PaginaAtual de @Model.TotalPaginas</p>
+            </td>
+            <td style="width:50px">
+                @if (Model.PaginaAtual < Model.TotalPaginas)
+                {
+                    <p>  @Html.ActionLink(">>", "Index", new { page = Model.PaginaAtual + 1 }, new { @class = "btn btn-default" })  </p>
+
+                }
+               
+            </td>
+        </tr>
+    </table>
+</div>

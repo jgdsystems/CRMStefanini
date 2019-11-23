@@ -1,0 +1,423 @@
+﻿@model WebSoccer.Models.Match
+
+@{
+    ViewBag.Title = "Edição de partida";
+}
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function ()
+        {
+            $("#Confirmation").inputmask("mask", { "mask": "99/99/9999 99:99:99" });
+            //$("#cpf").inputmask("mask", { "mask": "999.999.999-99" }, {reverse:true});
+            //$("#cep").inputmask("mask", { "mask": "99999-999" });
+            //$("#nascimento").inputmask("mask", { "mask": "99/99/9999" });
+            //$("#preco").inputmask("mask", { "mask": "999.999,99" }, { reverse: true });
+
+            var temp = document.getElementById('Status').value
+            if (temp == 'Partida Finalizada') {
+                $("#Score_a").inputmask('integer', { min: 1, max: 100 });
+                $("#Score_b").inputmask('integer', { min: 1, max: 100 });
+            }
+            //$("#ip").inputmask("mask", { "mask": "999.999.999.999" });
+        });
+
+        var temp = document.getElementById('Status').value
+        if (temp == 'Partida Finalizada') {
+            
+            $('#Score_a').keyup(function () {
+                $(this).val(this.value.replace(/\D/g, '0'));
+            });
+
+            $('#Score_b').keyup(function () {
+                $(this).val(this.value.replace(/\D/g,'0'));
+            });
+        }
+
+        //$(function () {
+        //    $('input[type=datetime]').datepicker({
+        //        dateFormat: 'dd/mm/yy',
+        //        dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+        //        dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
+        //        dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+        //        monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+        //        monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+        //        nextText: 'Proximo',
+        //        prevText: 'Anterior',
+        //        showOn: "button"
+        //    }).css("display", "inline-block")
+        //        .next("button").button({
+        //            icons: { primary: "ui-icon-calendar" },
+        //            label: "Selecione uma data",
+        //            text: false
+        //        });
+        //});
+        
+
+        //http://trentrichardson.com/examples/timepicker/
+        $('input[type=datetime]').datetimepicker({
+        dateFormat: 'dd/mm/yy',
+            timeFormat: 'HH:mm:ss',
+            stepHour: 1,
+            stepMinute: 1,
+            stepSecond: 1
+        });
+
+
+        offJquery();
+        initAutocomplete();
+        chamaMapa();
+
+        function offJquery() {
+            var temp = document.getElementById('Status').value
+            if (temp == 'Partida Finalizada') {
+                $('input[type=datetime]').off();
+            }
+
+        }
+
+       
+
+
+
+                //variavel cria para que seja criado o mapa Google Maps
+                var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);;
+
+        //Essa e a funcao que criara o mapa GoogleMaps
+        function chamaMapa() {
+                    //aqui vamos definir as coordenadas de latitude e longitude no qual
+                    //sera exibido o nosso mapa
+                    var lat = document.getElementById('Latitude').value;
+                    var lng = document.getElementById('Longitude').value;
+
+                    var latlng = new google.maps.LatLng(lat, lng); //DEFINE A LOCALIZAÇÃO EXATA DO MAPA
+                                                                   //aqui vamos configurar o mapa, como o zoom, o centro do mapa, etc
+                    var myOptions = {
+                zoom: 15,//utilizaremos o zoom 15
+
+                center: latlng,//aqui a nossa variavel constando latitude e
+                //longitude ja declarada acima
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+
+                //maxZoomServiceCallback: function (resp) {
+                //    gmap.setZoom(resp.zoom);
+                //},
+                //isAerialAvailable: function () {
+                //    var ll = gmap.getCenter();
+                //    var proj = gmap.getProjection();
+                //    if (!proj) {
+                //        setTimeout(function () { myMap.isAerialAvailable(); }, 100);
+                //        return;
+                //    }
+                //    var p = proj.fromLatLngToPoint(new google.maps.LatLng(ll.lat, ll.lon));
+                //    p.x = Math.floor(p.x / 256 * 8388608);
+                //    p.y = Math.floor(p.y / 256 * 8388608);
+                //    jQuery.getScript("https://khm.googleapis.com/mz?v=199&x=" + p.x + "&y=" + p.y + "&z=23&token=AIzaSyC8oXQERf6ixVrzG1GbfrGHK1KsWAX9yUE&callback=myMap.maxZoomServiceCallback");
+                //    //maxZoomService.getMaxZoomAtLatLng({lng: ll.lon, lat: ll.lat}, this.maxZoomServiceCallback)
+                //}
+
+
+                };
+                //criando o mapa dentro da div com o id="map_canvas" que ja criamos
+                map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+
+
+
+            //DEFINE AS COORDENADAS do ponto exato - CENTRALIZAÇÃO DO MAPA
+            
+                map.setCenter(new google.maps.LatLng(lat, lng));
+
+                var marker = new google.maps.Marker({
+                    position: latlng,
+                    map: map
+                });
+
+                marker.addListener('click', function () {
+                map: map.setZoom(25);
+                map: map.setCenter(marker.getPosition());
+            });
+            
+
+
+            //Verifica coordenadas do campo de pesquisa
+            google.maps.event.addListener(autocomplete, 'place_changed', function () {
+                // centraliza na endereço digitado e ajusta o zoom
+                map.setCenter(autocomplete.getPlace().geometry.location);
+
+
+
+                //maxZoomService.getMaxZoomAtLatLng(autocomplete.getPlace().geometry.location,
+                //function (response) {
+                //    map.setZoom(response.status == google.maps.MaxZoomStatus.OK ? parseInt(response.zoom * .85) : 16);
+                //});
+
+                // adiciona uma marker para o endereço
+
+
+                var uluru = autocomplete.getPlace().geometry.location;
+
+                var lat = autocomplete.getPlace().geometry.location.lat();
+                var lng = autocomplete.getPlace().geometry.location.lng();
+
+                document.getElementById('Latitude').value = lat;
+                document.getElementById('Longitude').value = lng;
+
+
+                //var map = new google.maps.Map(document.getElementById('map'), {
+                //    zoom: 4,
+                //    center: uluru
+                //});
+                var marker = new google.maps.Marker({
+                    position: uluru,
+                    map: map
+                });
+
+            marker.addListener('click', function () {
+                map.setZoom(25);
+                map.setCenter(marker.getPosition());
+            });
+
+            });
+
+        }
+
+
+
+        function abreLink() {
+            window.open('http://www.google.com.br');
+        }
+
+
+        var placeSearch, autocomplete;
+        var componentForm = {
+        street_number: 'short_name',
+        route: 'long_name',
+        locality: 'long_name',
+        administrative_area_level_1: 'short_name',
+        country: 'long_name',
+        postal_code: 'short_name'
+      };
+
+        function initAutocomplete() {
+            // Create the autocomplete object, restricting the search to geographical
+            // location types.
+            autocomplete = new google.maps.places.Autocomplete(
+                (document.getElementById('autocomplete')),
+                {types: ['geocode']});
+
+        // When the user selects an address from the dropdown, populate the address
+        // fields in the form.
+        autocomplete.addListener('place_changed', fillInAddress);
+      }
+
+      function fillInAddress() {
+            // Get the place details from the autocomplete object.
+            var place = autocomplete.getPlace();
+
+            //for (var component in componentForm) {
+            //  document.getElementById(component).value = '';
+            //  document.getElementById(component).disabled = false;
+            //}
+
+            // Get each component of the address from the place details
+            // and fill the corresponding field on the form.
+
+            //for (var i = 0; i < place.address_components.length; i++) {
+            //  var addressType = place.address_components[i].types[0];
+            //  if (componentForm[addressType]) {
+            //    var val = place.address_components[i][componentForm[addressType]];
+            //    document.getElementById(addressType).value = val;
+            //  }
+            //}
+
+            //Atualiza campo de endereço
+            atualizaEndereco();
+
+        }
+
+
+        function geolocate() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    var geolocation = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+
+                chamaMapa();
+
+                var circle = new google.maps.Circle({
+                        center: geolocation,
+                        radius: position.coords.accuracy
+                    });
+            autocomplete.setBounds(circle.getBounds());
+        });
+            }
+        }
+
+
+        function atualizaEndereco() {
+            var endereco = document.getElementById("autocomplete").value;
+            document.getElementById('Address').value = endereco;
+        }
+
+
+
+
+
+
+
+    </script>
+}
+
+
+@Html.Partial("_ViewSession")
+
+<h2>Editando partida</h2>
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyC8oXQERf6ixVrzG1GbfrGHK1KsWAX9yUE&libraries=places"></script>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @*<h4>Match</h4>*@
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id_match)
+
+        @{var StatusSelecao = Request["Status"]; }
+        @if (StatusSelecao != null)
+        {
+            if (StatusSelecao.Equals("1"))
+            {
+                <div class="form-group">
+                    @Html.Label("", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        <a style="color:red;text-align:center">Para enviar convites devem existir 14 jogadores associados na seleção.</a>
+                    </div>
+                </div>
+            }
+        }
+
+        
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+              <input type="submit" value="Salvar" class="btn btn-default"/>
+              @if (Model.Status != "Partida Finalizada")
+              {
+                @Html.ActionLink("Enviar convites", "Invitation", "Match", Model, new { @class = "btn btn-default" }) 
+                <a> </a>  
+                @Html.ActionLink("Finalizar", "EndMatch", "Match", Model, new { @class = "btn btn-default" })
+              }
+                @Html.ActionLink("Fechar", "Index", new { }, new { @class = "btn btn-default" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Status", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Status, new { htmlAttributes = new { @class = "form-control", Readonly = "true" } })
+                @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            @Html.Label("Data e horário", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+
+                @if (Model.Status != "Partida Finalizada")
+                {
+                    @Html.EditorFor(model => model.Confirmation, new { htmlAttributes = new { @class = "form-control" } })
+                }
+                else
+                {
+                    @Html.EditorFor(model => model.Confirmation, new { htmlAttributes = new { @class = "form-control", Readonly = "true" } })
+                }
+
+                @Html.ValidationMessageFor(model => model.Confirmation,"", new { @class = "text-danger" })
+            </div>
+        </div>
+        @if (Model.Status != "Partida Finalizada")
+        {
+        <div class="form-group">
+            @Html.Label("Pesquisa de endereço", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div id="locationField" class="col-md-10">
+                <input id="autocomplete" placeholder="Digite um endereço" onFocus="geolocate()" type="text" class="form-control" style="width:100%"></input>
+            </div>
+        </div>
+        }
+        <div class="form-group">
+            @Html.Label("Endereço", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+            @if (Model.Status != "Partida Finalizada")
+            {
+                @Html.TextAreaFor(model => model.Address, new { @class = "form-control", style = "width: 305px; height: 114px;" })
+            }
+            else
+            {
+                @Html.TextAreaFor(model => model.Address, new { @class = "form-control", style = "width: 305px; height: 114px;",  Readonly = "true" })
+            }
+                
+                @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+            </div>
+
+        </div>
+
+        @{
+            List<SelectListItem> listItems = new List<SelectListItem>();
+
+            for (int i = 1; i < 101; i++)
+            {
+                listItems.Add(new SelectListItem
+                {
+                    Text = i.ToString(),
+                    Value = i.ToString()
+                });
+
+            }
+
+        }
+
+
+        @if (Model.Status.Equals("Partida Finalizada"))
+        {
+            
+                <div class="form-group">
+                    @Html.Label("Resultado " + Model.TeamA.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.DropDownListFor(model => model.Score_a, new SelectList(listItems, "Value", "Text"), "0", new { @class = "form-control" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Label("Resultado " + Model.TeamB.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.DropDownListFor(model => model.Score_b, new SelectList(listItems, "Value", "Text"), "0", new { @class = "form-control" })
+                    </div>
+                </div>
+                }
+
+
+                <div class="form-group">
+                    @Html.Label("Latitude", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Latitude, new { htmlAttributes = new { @class = "form-control", Readonly = "true" } })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Label("Longitude", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Longitude, new { htmlAttributes = new { @class = "form-control", Readonly = "true" } })
+                    </div>
+                </div>
+
+
+</div>
+}
+
+<div id="map_canvas" style="width: 95%; height: 432px">
+</div>

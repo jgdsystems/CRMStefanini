@@ -1,0 +1,104 @@
+﻿@model WebSoccer.ViewModel.ListaPaginada<WebSoccer.Models.Match>
+
+@{
+    ViewBag.Title = "Cadastro de partidas";
+}
+
+@Html.Partial("_ViewSession")
+
+<h2>Cadastro de partidas</h2>
+
+@*<h2>Index</h2>*@
+
+<p>
+    @if (Model.NewMatch.Equals(true))
+    {
+        @Html.ActionLink("Criar nova partida", "AddMatch", new { }, new { @class = "btn btn-default" })
+    }
+</p>
+<table class="table">
+    <tr>
+
+        <th>
+            @Html.DisplayName("Data")
+        </th>
+        <th>
+            @Html.DisplayName("Endereço")
+        </th>
+        <th>
+            @Html.DisplayName("Status")
+        </th>
+        <th></th>
+    </tr>
+
+
+    @if (Model.TotalItens > 0)
+    {
+
+        var count = 0;
+        var corfundo = "#EAEAEA";
+        foreach (var item in Model.Itens)
+        {
+
+            <tr bgcolor="@corfundo" onclick="window.open('../Match/Edit/@item.Id_match','_self')" onMouseOver="this.bgColor='#CCCCCC'" onMouseOut="this.bgColor='@corfundo'" cursor="Auto">
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Confirmation)
+                </td>
+               
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+
+            </tr>
+            count++;
+            if (@corfundo == "#FFFFFF")
+            { corfundo = "#EAEAEA"; }
+            else
+            { corfundo = "#FFFFFF"; }
+
+        }
+    }
+
+</table>
+
+
+@if (Model.TotalPaginas > 1)
+{
+    <div>
+        @for (var i = 1; i < Model.TotalPaginas; i++)
+        {
+            Url.Action("Index", new { page = i });
+        }
+    </div>
+}
+
+
+<div class="container">
+    <table>
+        <tr>
+            <td style="width:50px">
+                @if (Model.PaginaAtual > 1)
+            {
+                    <p>  @Html.ActionLink("<<", "Index", new { page = Model.PaginaAtual - 1 }, new { @class = "btn btn-default" })  </p>
+
+                }
+
+            </td>
+            <td style="width:100px">
+                <p>P&aacute;gina @Model.PaginaAtual de @Model.TotalPaginas</p>
+            </td>
+            <td style="width:50px">
+                @if (Model.PaginaAtual < Model.TotalPaginas)
+                {
+                    <p>  @Html.ActionLink(">>", "Index", new { page = Model.PaginaAtual + 1 }, new { @class = "btn btn-default" })  </p>
+
+                }
+
+            </td>
+        </tr>
+    </table>
+</div>

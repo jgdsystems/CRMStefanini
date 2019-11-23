@@ -1,0 +1,154 @@
+﻿@model WebSoccer.Models.Players
+
+@{
+    ViewBag.Title = "Editar";
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function ()
+        {
+            $("#Phonenumber").inputmask("mask", { "mask": "(99) 99999-9999" });
+            //$("#cpf").inputmask("mask", { "mask": "999.999.999-99" }, {reverse:true});
+            //$("#cep").inputmask("mask", { "mask": "99999-999" });
+            //$("#nascimento").inputmask("mask", { "mask": "99/99/9999" });
+            //$("#preco").inputmask("mask", { "mask": "999.999,99" }, { reverse: true });
+            //$("#valor").inputmask("mask", { "mask": "#.##9,99" }, { reverse: true });
+            //$("#ip").inputmask("mask", { "mask": "999.999.999.999" });
+    });
+    </script>
+}
+
+@Html.Partial("_ViewSession")
+
+
+<h2>Editar</h2>
+
+@using (Html.BeginForm("Edit","Players"))
+{
+                @Html.AntiForgeryToken()
+
+                <div class="form-horizontal">
+        <h4>Jogador</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        @Html.HiddenFor(model => model.Id_player)
+
+        <div class="form-group">
+            @Html.Label("Nome", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control"  } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        
+        <div class="form-group">
+            @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Celular", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Phonenumber, new { htmlAttributes = new { @class = "form-control"} })
+                @Html.ValidationMessageFor(model => model.Phonenumber, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        @*<div class="form-group">
+            @Html.Label("Tipo", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Type, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+
+        <div class="form-group">
+            @Html.Label("Tipo", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+
+                @{
+                    List<SelectListItem> listItems = new List<SelectListItem>();
+                    listItems.Add(new SelectListItem
+                    {
+                        Text = "Pagante",
+                        Value = "Pagante"
+                    });
+                    listItems.Add(new SelectListItem
+                    {
+                        Text = "Convidado",
+                        Value = "Convidado",
+                    });
+                }
+
+                @Html.DropDownListFor(model => model.Type, new SelectList(listItems, "Value", "Text"), "Selecione", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
+
+
+            </div>
+        </div>
+
+
+
+                    <div class="form-group">
+                        @Html.Label("Posição", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+
+                            @{
+                                List<SelectListItem> listPosition = new List<SelectListItem>();
+                                foreach (var item in Model.ListPositions)
+                                {
+                                    listPosition.Add(new SelectListItem
+                                    {
+                                        Text = item.Name,
+                                        Value = item.Id_Positions.ToString()
+                                    });
+
+                                }
+
+                            }
+
+
+                            @Html.DropDownListFor(model => model.Id_Positions, new SelectList(listPosition, "Value", "Text"),"Selecione", new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Id_Positions, "", new { @class = "text-danger" })
+
+
+                        </div>
+                    </div>
+
+
+
+                    @*<div class="form-group">
+                        @Html.Label("Status", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Status, new { htmlAttributes = new { @class = "form-control", @enable = "false", @readonly = "readonly" } })
+                            @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+                        </div>
+                    </div>*@
+
+        @*<div class="form-group">
+            @Html.LabelFor(model => model.Users_id_users, "Users_id_users", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("Users_id_users", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Users_id_users, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                 
+                <input type="submit" value="Salvar" class="btn btn-default" />
+                
+                @Html.ActionLink("Excluir", "Delete", new { id = Model.Id_player }, new { @class = "btn btn-default" })
+                @Html.ActionLink("Cancelar", "Index", new {}, new { @class = "btn btn-default" })
+            </div>
+        </div>
+    </div>
+}
+

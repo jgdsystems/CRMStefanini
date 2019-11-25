@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/themes/base/all.css")
+    <link href="~/Content/jquery-ui-timepicker-addon.css" rel="stylesheet" />
+    <link href="~/Content/jquery-ui-timepicker-addon.min.css" rel="stylesheet" />
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+  
+    
+
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - CRM</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/inputmask")
+    @Scripts.Render("~/Scripts/jquery-ui-1.11.4.min.js")
+    <script src="~/Scripts/jquery-ui-sliderAccess.js"></script>
+    <script src="~/Scripts/jquery-ui-timepicker-addon.js"></script>
+    <script src="~/Scripts/jquery-ui-timepicker-addon.min.js"></script>
+    <script src="~/Scripts/i18n/jquery-ui-timepicker-pt-BR.js"></script>
+    @RenderSection("scripts", required: false)
+
+    @Scripts.Render("~/bundles/datatables")
+    <script src="~/Scripts/DataTables/jquery.dataTables.min.js"></script>
+    <script src="~/Scripts/DataTables/dataTables.bootstrap.js"></script>
+
+    @Scripts.Render("~/Content/datatables")
+    <script src="~/Content/DataTables/css/dataTables.bootstrap.css"></script>
+
+   </body>
+</html>

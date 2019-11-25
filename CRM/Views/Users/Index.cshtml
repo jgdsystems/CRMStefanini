@@ -1,0 +1,26 @@
+﻿@model IEnumerable< CRM.Models.Users>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+    <div> 
+        <ul>
+            @foreach (CRM.Models.Users item in Model)
+            {
+                <li>
+                        <a target="_blank" href="~/User/Item/@item.Id_user">@item.Email</a>
+                </li>
+            }
+        </ul>
+    </div>
+</body>
+</html>

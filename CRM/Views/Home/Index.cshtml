@@ -1,0 +1,17 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="jumbotron">
+    
+    @Html.Partial("_ViewSession")
+    
+    <h2>Customer Relationship Management - CRM</h2>
+
+    @if (TempData["Mensagem"] != null)
+    {
+        <div> @TempData["Mensagem"]</div>
+    }
+
+</div>
+

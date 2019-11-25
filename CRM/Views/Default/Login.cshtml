@@ -1,0 +1,75 @@
+﻿@model CRM.Models.Users
+@{
+    ViewBag.Title = "Login";
+}
+    <div class="form-horizontal" style="align-content:center">
+            <div align="center">
+                <h3>Customer Relationship Management - CRM</h3>
+            </div>
+            @using (Html.BeginForm("ValidaLogin", "Default"))
+            {
+                <div class="table-bordered" style="align-content:center">
+                    <table class="table" align="center">
+
+                        <tr>
+                            <td align="right">
+                                @Html.Label("Email:")
+                            </td>
+                            <td>
+                                @Html.TextBox("email", "", new { @class = "form-control" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right">
+                                @Html.Label("Senha:")
+                            </td>
+                            <td>
+                                @Html.Password("password", "", new { @class = "form-control" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>
+                                <input type="submit" value="Login" class="btn btn-primary btn-sm" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>
+                                @Html.ActionLink("Novo cadastro", "Cadastro", "Default")
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>
+                                @Html.ActionLink("Recuperar senha", "Recover")
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <table align="center">
+                    <tr>
+                        <td>
+                            <b style="color:red">@Html.ValidationSummary()</b>
+
+                            @{ if (ViewBag.status == "1")
+                                {
+                                    <b style="color:red">O e-mail e/ou a senha digitada é inválida. Por favor, tente novamente. </b>
+                                }
+
+                                if (ViewBag.status == "2")
+                                {
+                                    <b style="color:red">Tempo de sessão finalizada.</b>
+                                }
+                            }
+                        <td>
+                    </tr>
+                </table>
+
+          }
+
+</div>
+
+
+
+   

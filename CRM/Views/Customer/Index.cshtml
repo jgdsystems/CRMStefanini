@@ -1,0 +1,86 @@
+﻿@model IEnumerable<CRM.Models.Customers>
+
+@{
+    ViewBag.Title = "Lista de clientes";
+}
+
+@Html.Partial("_ViewSession")
+
+<h2>Cadastro de clientes</h2>
+
+<p>
+    @Html.ActionLink("Novo cliente", "Create", new { }, new { @class = "btn btn-default" })
+</p>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-primary list-panel" id="list-panel">
+            <div class="panel-body">
+                <table id="assets-data-table" class="table table-striped table-bordered" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Classificação</th>
+                            <th>Nome</th>
+                            <th>Telefone</th>
+                            <th>Gênero</th>
+                            <th>Cidade</th>
+                            <th>Região</th>
+                            <th>Última compra</th>
+                            @if (ViewBag.IsAdmin)
+                            {
+                                <th>Vendedor</th>
+                            }
+                          </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var asset in Model)
+                        {
+                            <tr  
+                                onclick="window.open('../Customer/Edit/@asset.Id_customer','_self')" 
+                                cursor="auto"
+                            >
+                                @{
+                                    var classification = @asset.Classification != null ? CommonLists.Classification().Where(c => c.Value == @asset.Classification).FirstOrDefault().Text : "";
+                                    var sex = @asset.Sex != null ? CommonLists.SexList().Where(s => s.Value == @asset.Sex).FirstOrDefault().Text : "";
+                                    //var citysList = new SelectList(ViewBag.citys, "idRegion", "Description");
+                                    //var city = @asset.City != null ? citysList.Where(c=> c.Value == @asset.City).FirstOrDefault().Text : "";
+                                    
+                                }
+
+                                <td>@classification</td>
+                                <td>@asset.Name</td>
+                                <td>@asset.Phone</td>
+                                <td>@sex</td>
+                                <td>@asset.City</td>
+                                <td>@asset.Region</td>
+                                <td>@asset.LastPurchase</td>
+                                @if (ViewBag.IsAdmin)
+                                {
+                                    <td>@asset.User.Name</td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script type="text/javascript">
+
+     $(document).ready(function () {
+
+         $('#assets-data-table').DataTable(
+             {
+                 columnDefs: [{
+                     targets: [4],
+                     orderData: [5, 4]
+                 }]
+             } 
+         );
+     });
+    </script>
+}

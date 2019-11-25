@@ -1,0 +1,152 @@
+﻿@model CRM.Models.Customers
+
+@{
+    ViewBag.Title = "Editar cliente";
+}
+
+@section Scripts
+{
+    <script type="text/javascript">
+
+        $("#LastPurchase").inputmask("mask", { "mask": "99/99/9999" });
+        $('#LastPurchase').datepicker({
+            format: "dd/MM/yyyy",
+            startDate: "tomorrow",
+            language: "pt-BR",
+            orientation: "bottom right",
+            autoclose: true
+        });
+
+        $("#Until").inputmask("mask", { "mask": "99/99/9999" });
+        $('#Until').datepicker({
+            format: "dd/MM/yyyy",
+            startDate: "tomorrow",
+            language: "pt-BR",
+            orientation: "bottom right",
+            autoclose: true
+        });
+
+        $("#Phone").inputmask("mask", { "mask": "(99) 99999-9999" });
+
+        function FillRegion() {
+            var cityId = $('#City').val();
+            $.ajax({
+                url: '/Customer/FillRegion',
+                type: "GET",
+                dataType: "JSON",
+                data: { City: cityId },
+                success: function (regions) {
+                    $("#Region").html(""); // clear before appending new list
+                    $.each(regions, function (i, region) {
+                        $("#Region").append(
+                            $('<option></option>').val(region.idRegion).html(region.Description));
+                    });
+                }
+            });
+        }
+        
+    </script>
+}
+
+@Html.Partial("_ViewSession")
+
+<h2>Editar</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>Cliente</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id_customer)
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.Label("Nome", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Classificação", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @{
+                    var classificationList = CommonLists.Classification();
+                }
+
+                @Html.DropDownListFor(model => model.Classification, new SelectList(classificationList, "Value", "Text"), "Selecione", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Classification, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Telefone", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Gênero", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @{
+                    var sexList = CommonLists.SexList();
+                }
+
+                @Html.DropDownListFor(model => model.Sex, new SelectList(sexList, "Value", "Text"), "Selecione", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Sex, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Cidade", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+              
+                @Html.DropDownListFor(m => m.City, new SelectList(ViewBag.Citys, "Description", "Description"), "Selecione",
+                /*new { @class = "form-control", @onchange = "FillRegion()" })*/
+                new { @class = "form-control"})
+                @Html.ValidationMessageFor(m => m.City, "", new { @class = "text-danger" })
+                
+                </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Região", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+               
+                @Html.DropDownListFor(m => m.Region, new SelectList(ViewBag.Regions, "Description", "Description"), "Selecione", new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Region, "", new { @class = "text-danger" })
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Última compra", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.LastPurchase, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.LastPurchase, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Até", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Until, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Until, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Salvar" class="btn btn-default" />
+                @Html.ActionLink("Cancelar", "Index", new { }, new {@class="btn btn-default" })
+            </div>
+        </div>
+    </div>
+}
+

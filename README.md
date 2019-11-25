@@ -17,4 +17,12 @@ CRM MVC-5 Versão 1.0
 Autor: Julio Duarte
 Email para julio.pes@gmail.com
 
+Melhorias pendentes:
+
+* Filtro entre Cidades e regiões teve um inicio de implementação mas não foi finalizado;
+* Arquitetura centralizada na camada de Front-End MVC o ideal é criar um projeto de Domínio como Back-End juntamente com um projeto de serviços de infra.
+* Um exemplo de teste unitário foi criado mas não foi muito explorado.
+* Atualizar projeto para .Net Core (tecnologia mais recente).
+* Atualizar versão do Bootstrap (Por medidas de segurança).
+
 
